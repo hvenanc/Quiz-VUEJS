@@ -22,6 +22,7 @@
         <h4 v-else>
           &#10060; I'm sorry, you picked the wrong answer! The correct answer is: "{{ this.correctAnswer }}"
         </h4>
+        <button type="submit" @click="this.getNewQuestion()">Next Question</button>
       </section>
     </template>
   </div>
@@ -50,15 +51,6 @@ export default {
     },
   },
 
-  created() {
-    const api =
-      "https://opentdb.com/api.php?amount=10&category=21&difficulty=easy";
-    this.axios.get(api).then((response) => {
-      this.question = response.data.results[0].question;
-      this.incorrectAnswers = response.data.results[0].incorrect_answers;
-      this.correctAnswer = response.data.results[0].correct_answer;
-    });
-  },
   methods: {
     submitAwswer() {
       if(!this.chosenAnswer) {
@@ -73,7 +65,23 @@ export default {
           alert("You lose!")
         }
       }
+    },
+    getNewQuestion() {
+      this.chosenAnswer = undefined;
+      this.answerSubmit = false;
+      this.question = undefined;
+      const api =
+      "https://opentdb.com/api.php?amount=10&category=21&difficulty=easy";
+    this.axios.get(api).then((response) => {
+      this.question = response.data.results[0].question;
+      this.incorrectAnswers = response.data.results[0].incorrect_answers;
+      this.correctAnswer = response.data.results[0].correct_answer;
+    });
     }
+  },
+
+  created() {
+    this.getNewQuestion();
   }
 };
 </script>
