@@ -1,15 +1,12 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-  </div>
+  <section class="score">
+    Player <span>{{ this.winCount }}</span> X <span> {{ this.loseCount }}</span> Computer
+  </section>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
+  props: ['winCount', 'loseCount']
 }
 </script>
 

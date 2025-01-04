@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ScoreBoard :winCount="this.winCount" :loseCount="this.loseCount"/>
     <template v-if="this.question">
       <h1 v-html="this.question"></h1>
 
@@ -13,7 +14,7 @@
         v-model="this.chosenAnswer" />
         <label v-html="answer"></label><br />
       </template>
-      <button v-if="!this.answerSubmit" type="submit" @click="this.submitAwswer()">Check</button>
+      <button v-if="!this.answerSubmit" type="submit" @click="this.submitAwswer()" class="send">Check</button>
 
       <section v-if="answerSubmit" class="result">
         <h4 v-if="this.chosenAnswer == this.correctAnswer">
@@ -22,15 +23,21 @@
         <h4 v-else>
           &#10060; I'm sorry, you picked the wrong answer! The correct answer is: "{{ this.correctAnswer }}"
         </h4>
-        <button type="submit" @click="this.getNewQuestion()">Next Question</button>
+        <button type="submit" @click="this.getNewQuestion()" class="send">Next Question</button>
       </section>
     </template>
   </div>
 </template>
 
 <script>
-export default {
-  name: "App",
+
+  import ScoreBoard from './components/ScoreBoard.vue';
+  
+  export default {
+    name: "App",
+    components: {
+      ScoreBoard
+    },
 
   data() {
     return {
@@ -38,7 +45,9 @@ export default {
       incorrectAnswers: undefined,
       correctAnswer: undefined,
       chosenAnswer: undefined,
-      answerSubmit: false
+      answerSubmit: false,
+      winCount: 0,
+      loseCount: 0,
     };
   },
 
@@ -59,10 +68,10 @@ export default {
       else {
         this.answerSubmit = true;
         if(this.chosenAnswer == this.correctAnswer) {
-          alert("Correct")
+          this.winCount++;
         }
         else {
-          alert("You lose!")
+          this.loseCount++;
         }
       }
     },
@@ -93,6 +102,39 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 60px auto;
+  max-width: 960px;
+
+}
+
+h1 {
+  margin-top: 40px;
+}
+
+input[type='radio']{
+  margin: 12px 4px;
+}
+
+button.send {
+  margin-top: 12px;
+  height: 40px;
+  min-width: 120px;
+  padding: 0 16px;
+  color: #fff;
+  background-color: #1867c0;
+  border: 1px solid #1867c0;
+  cursor: pointer;
+}
+
+section.score {
+  border-bottom: 1px solid black;
+  padding: 24px;
+  font-size: 18px;
+
+  span {
+    padding: 8px;
+    font-weight: bold;
+    border: 1px solid black;
+  }
 }
 </style>
