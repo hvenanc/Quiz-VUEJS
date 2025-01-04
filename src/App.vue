@@ -5,6 +5,7 @@
 
       <template v-for="answer in this.answers" v-bind:key="answer">
         <input 
+        :disabled="answerSubmit"
         type="radio" 
         name="options" 
         id="answer"
@@ -12,7 +13,16 @@
         v-model="this.chosenAnswer" />
         <label v-html="answer"></label><br />
       </template>
-      <button type="submit" @click="this.submitAwswer()">Check</button>
+      <button v-if="!this.answerSubmit" type="submit" @click="this.submitAwswer()">Check</button>
+
+      <section v-if="answerSubmit" class="result">
+        <h4 v-if="this.chosenAnswer == this.correctAnswer">
+          &#9989; Congratulations, the answer "{{ this.correctAnswer }}" is correct!
+        </h4>
+        <h4 v-else>
+          &#10060; I'm sorry, you picked the wrong answer! The correct answer is: "{{ this.correctAnswer }}"
+        </h4>
+      </section>
     </template>
   </div>
 </template>
@@ -26,7 +36,8 @@ export default {
       question: undefined,
       incorrectAnswers: undefined,
       correctAnswer: undefined,
-      chosenAnswer: undefined
+      chosenAnswer: undefined,
+      answerSubmit: false
     };
   },
 
@@ -54,6 +65,7 @@ export default {
         alert("Select one answer");
       }
       else {
+        this.answerSubmit = true;
         if(this.chosenAnswer == this.correctAnswer) {
           alert("Correct")
         }
